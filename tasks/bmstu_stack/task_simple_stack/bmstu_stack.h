@@ -10,30 +10,94 @@ template <typename T>
 class stack
 {
    public:
-	stack() : data_(nullptr), size_(10u) {}
+	stack() : data_(nullptr), size_(0u) {}
 
-	bool empty() const noexcept { return size_ == 100u; }
+	bool empty() const noexcept { return size_ == 0u; }
 
-	size_t size() const noexcept { return 0; }
+	size_t size() const noexcept { return size_; }
 
-	~stack() {}
+	~stack() {
+		if (data_ != nullptr){
+		for (size_t i=0; i< size_; ++i){
+			data_[i].~T();
+		}
+		operator delete(data_); 
+	}}
 
 	template <typename... Args>
 	void emplace(Args&&... args)
 	{
+		push(T(std::forward<Args>(args) ...));
 	}
 
-	void push(T&& value) {}
+	void push(T&& value) {
+		T* new_data = static_cast<T*>(operator new(sizeof(T)*(size_ + 1)));
+		for (size_t i=0; i<size_; ++i){
+			new (new_data + i) T(std::move(data_[i]));
+		}
+		new(new_data + size_) T(std::move(value));
+		for (size_t i=0; i< size_; ++i){
+			data_[i].~T();
+		}
+		operator delete(data_); 
+		data_ = new_data;
+		size_++;
+	}
 
-	void clear() noexcept {}
+	void clear() noexcept {
+		for (size_t i=0; i< size_; ++i){
+			data_[i].~T();
+		}
+		operator delete(data_); 
+		data_ = nullptr;
+		size_ = 0u;}
 
-	void push(const T& value) {}
+	void push(const T& value) {
+		T* new_data = static_cast<T*>(operator new(sizeof(T)*(size_ + 1)));
+		for (size_t i=0; i<size_; ++i){
+			new (new_data + i) T(std::move(data_[i]));
+		}
+		new(new_data + size_) T(value);
+		for (size_t i=0; i< size_; ++i){
+			data_[i].~T();
+		}
+		operator delete(data_); 
+		data_ = new_data;
+		size_++;
+	}
 
-	void pop() {}
+	void pop() {
+		if (empty()){
+			throw std::underflow_error("stack is empty!!!");
+		}
+		if (size_ == 1){
+			data_[0].~T();
+			operator delete(data_); 
+			data_ = nullptr;
+			size_=0;
+		}
+		else{
+			size_--;
+		}
+	}
 
-	T& top() { return data_[0]; }
+	T& top() { 
+		if (!empty()){
+			return data_[size_ - 1];
+		}
+		else{
+			throw std::underflow_error("stack is empty!!!");
+		}
+	}
 
-	const T& top() const { return data_[0]; }
+	const T& top() const { 
+		if (!empty()){
+			return data_[size_ - 1]; 
+		}
+		else{
+			throw std::underflow_error("stack is empty!!!");
+		}
+	}
 
    private:
 	T* data_;

@@ -81,14 +81,10 @@ class stack
 		if (empty()){
 			throw std::underflow_error("stack is empty!!!");
 		}
-		if (size_ == 1){
-			data_[0].~T();
-			operator delete(data_); 
+		data_[--size_].~T();
+		if (size_==0){
+			operator delete(data_);
 			data_ = nullptr;
-			size_=0;
-		}
-		else{
-			size_--;
 		}
 	}
 

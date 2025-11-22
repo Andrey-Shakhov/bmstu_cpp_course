@@ -27,7 +27,18 @@ class stack
 	template <typename... Args>
 	void emplace(Args&&... args)
 	{
-		push(T(std::forward<Args>(args) ...));
+		// push(T(std::forward<Args>(args) ...));
+		T* new_data = static_cast<T*>(operator new(sizeof(T)*(size_ + 1)));
+		for (size_t i=0; i<size_; ++i){
+			new (new_data + i) T(std::move(data_[i]));
+		}
+		new(new_data + size_) T(std::forward<Args>(args) ...);
+		for (size_t i=0; i< size_; ++i){
+			data_[i].~T();
+		}
+		operator delete(data_); 
+		data_ = new_data;
+		size_++;
 	}
 
 	void push(T&& value) {

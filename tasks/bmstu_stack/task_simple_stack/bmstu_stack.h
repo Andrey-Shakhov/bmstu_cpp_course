@@ -79,7 +79,7 @@ class stack
    private:
 	template <typename... Args>
 	void pushv(Args&&... args){
-		T* new_data = reinterpret_cast<T*>(operator new(sizeof(T)*(size_ + 1)));
+		T* new_data = (T*)(operator new(sizeof(T)*(size_ + 1)));
 		for (size_t i=0; i<size_; ++i){
 			new (new_data + i) T(std::move(data_[i]));
 		}

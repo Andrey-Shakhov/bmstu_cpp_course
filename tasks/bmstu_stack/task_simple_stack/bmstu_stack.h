@@ -10,15 +10,9 @@ template <typename T>
 class stack
 {
    public:
-	stack() : data_(nullptr), size_(0u) {}
+	stack() = default;
 
-	~stack() {
-		if (data_ != nullptr){
-		for (size_t i=0; i< size_; ++i){
-			data_[i].~T();
-		}
-		operator delete(data_); 
-	}}
+	~stack() { clear(); }
 
 	bool empty() const noexcept { return size_ == 0u; }
 
@@ -27,72 +21,82 @@ class stack
 	template <typename... Args>
 	void emplace(Args&&... args)
 	{
-		pushv(std::forward<Args>(args) ...);
-	}
- 
-	void push(T&& value) {
-		pushv(std::move(value));
+		pushv(std::forward<Args>(args)...);
 	}
 
-	void clear() noexcept {
-		for (size_t i=0; i< size_; ++i){
+	void push(T&& value) { pushv(std::move(value)); }
+
+	void clear() noexcept
+	{
+		for (size_t i = size_ - 1; i > -1; --i)
+		{
 			data_[i].~T();
 		}
-		operator delete(data_); 
+		operator delete(data_);
 		data_ = nullptr;
 		size_ = 0u;
 	}
 
-	void push(const T& value) {
-		pushv(value);
-	}
+	void push(const T& value) { pushv(value); }
 
-	void pop() {
-		if (empty()){
+	void pop()
+	{
+		if (empty())
+		{
 			throw std::underflow_error("stack is empty!!!");
 		}
 		data_[--size_].~T();
-		if (size_==0){
+		if (size_ == 0)
+		{
 			operator delete(data_);
 			data_ = nullptr;
 		}
 	}
 
-	T& top() { 
-		if (!empty()){
+	T& top()
+	{
+		if (!empty())
+		{
 			return data_[size_ - 1];
 		}
-		else{
+		else
+		{
 			throw std::underflow_error("stack is empty!!!");
 		}
 	}
 
-	const T& top() const { 
-		if (!empty()){
-			return data_[size_ - 1]; 
+	const T& top() const
+	{
+		if (!empty())
+		{
+			return data_[size_ - 1];
 		}
-		else{
+		else
+		{
 			throw std::underflow_error("stack is empty!!!");
 		}
 	}
 
    private:
 	template <typename... Args>
-	void pushv(Args&&... args){
-		T* new_data = (T*)(operator new(sizeof(T)*(size_ + 1)));
-		for (size_t i=0; i<size_; ++i){
+	void pushv(Args&&... args)
+	{
+		T* new_data = static_cast<T*>(operator new(sizeof(T) * (size_ + 1)));
+		for (size_t i = 0; i < size_; ++i)
+		{
 			new (new_data + i) T(std::move(data_[i]));
 		}
-		new(new_data + size_) T(std::forward<Args>(args) ...);
-		for (size_t i=0; i< size_; ++i){
+		new (new_data + size_) T(std::forward<Args>(args)...);
+		for (size_t i = 0; i < size_; ++i)
+		{
 			data_[i].~T();
 		}
-		operator delete(data_); 
+		operator delete(data_);
 		data_ = new_data;
 		size_++;
 	}
 
-	T* data_;
-	size_t size_;
+	T* data_ = nullptr;
+	size_t size_ = 0;
 };
 }  // namespace bmstu

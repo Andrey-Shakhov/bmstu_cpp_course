@@ -14,6 +14,8 @@ foreach (TASK ${TASKS})
             ${CMAKE_CURRENT_SOURCE_DIR}/${TASK}/*.c
             ${CMAKE_CURRENT_SOURCE_DIR}/${TASK}/*.natvis)
     list(APPEND SOURCES ${FILES})
+
+
 endforeach ()
 message(STATUS "SOURCES: ${SOURCES}")
 add_executable(${NAME_EXECUTABLE} ${SOURCES})

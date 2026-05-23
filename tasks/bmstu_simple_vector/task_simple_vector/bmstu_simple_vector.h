@@ -178,6 +178,14 @@ class simple_vector
 		}
 		return *this;
 	}
+	simple_vector& operator=(simple_vector&& other)
+	{
+		if (this != &other)
+		{
+			swap(other);
+		}
+		return *this;
+	}
 
 	simple_vector(size_t size, const T& value = T{})
 		: size_(size), capacity_(size), data_(size)

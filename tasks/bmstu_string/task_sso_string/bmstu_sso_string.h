@@ -80,7 +80,7 @@ class basic_string
 			is_long_ = true;
 			data_.long_str.capacity = size * 2;
 			data_.long_str.size = size;
-			data_.long_str.ptr = new T[data_.long_str.capacity+1];
+			data_.long_str.ptr = new T[data_.long_str.capacity + 1];
 		}
 		else
 		{
@@ -102,7 +102,7 @@ class basic_string
 			is_long_ = true;
 			data_.long_str.capacity = size * 2;
 			data_.long_str.size = size;
-			data_.long_str.ptr = new T[data_.long_str.capacity+1];
+			data_.long_str.ptr = new T[data_.long_str.capacity + 1];
 		}
 		else
 		{
@@ -126,7 +126,7 @@ class basic_string
 			is_long_ = true;
 			data_.long_str.capacity = len * 2;
 			data_.long_str.size = len;
-			data_.long_str.ptr = new T[data_.long_str.capacity+1];
+			data_.long_str.ptr = new T[data_.long_str.capacity + 1];
 		}
 		else
 		{
@@ -146,7 +146,7 @@ class basic_string
 		{
 			data_.long_str.size = other.data_.long_str.size;
 			data_.long_str.capacity = other.data_.long_str.capacity;
-			data_.long_str.ptr = new T[other.data_.long_str.capacity+1];
+			data_.long_str.ptr = new T[other.data_.long_str.capacity + 1];
 		}
 		else
 		{
@@ -179,8 +179,6 @@ class basic_string
 	const T* c_str() const { return get_ptr(); }
 
 	size_t size() const { return get_size(); }
-
-	bool is_using_sso() const { return !is_long_; }
 
 	size_t capacity() const { return get_capacity(); }
 
@@ -215,7 +213,7 @@ class basic_string
 			is_long_ = true;
 			data_.long_str.capacity = len * 2;
 			data_.long_str.size = len;
-			data_.long_str.ptr = new T[data_.long_str.capacity+1];
+			data_.long_str.ptr = new T[data_.long_str.capacity + 1];
 		}
 		else
 		{
@@ -239,7 +237,7 @@ class basic_string
 			{
 				data_.long_str.size = other.data_.long_str.size;
 				data_.long_str.capacity = other.data_.long_str.capacity;
-				data_.long_str.ptr = new T[data_.long_str.capacity+1];
+				data_.long_str.ptr = new T[data_.long_str.capacity + 1];
 			}
 			else
 			{
@@ -290,7 +288,8 @@ class basic_string
 			{
 				new_ptr[i] = get_ptr()[i];
 			}
-			if (is_long_){
+			if (is_long_)
+			{
 				delete[] data_.long_str.ptr;
 			}
 			data_.long_str.ptr = new_ptr;
@@ -341,6 +340,7 @@ class basic_string
 	}
 
 	T& operator[](size_t index) noexcept { return get_ptr()[index]; }
+	bool is_using_sso() const { return !is_long_; }
 
 	T& at(size_t index)
 	{

@@ -376,3 +376,19 @@ TEST(SSOStringTest, SSOCapacity)
 	ASSERT_FALSE(long_str.is_using_sso());
 	ASSERT_GE(long_str.capacity(), long_str.size());
 }
+
+TEST(StringTest, Item2)
+{
+	bmstu::wstring a_str(L"AB");
+	bmstu::wstring b_str(L"ABC");
+	auto c_str = a_str + b_str;
+	ASSERT_TRUE(c_str.is_using_sso());
+}
+
+TEST(StringTest, Item3)
+{
+	bmstu::string a_str("ABCDEF");
+	bmstu::string b_str("ABCDEF");
+	auto c_str = a_str + b_str;
+	ASSERT_TRUE(c_str.is_using_sso());
+}

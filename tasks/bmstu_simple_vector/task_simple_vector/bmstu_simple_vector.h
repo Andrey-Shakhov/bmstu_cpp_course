@@ -20,7 +20,7 @@ class simple_vector
 
 		iterator() = default;
 
-		iterator(const iterator& other) : ptr_(other.ptr_) {};
+		iterator(const iterator& other) : ptr_(other.ptr_) {}
 
 		iterator(std::nullptr_t) noexcept : ptr_(nullptr) {}
 
@@ -28,7 +28,6 @@ class simple_vector
 		{
 			other.ptr_ = nullptr;
 		}
-
 		explicit iterator(pointer ptr) : ptr_(ptr) {}
 
 		reference operator*() const { return *ptr_; }
@@ -364,8 +363,7 @@ class simple_vector
 		{
 			reserve(capacity_ * 2);
 		}
-		T temp = value;
-		data_[size_] = std::move(temp);
+		data_[size_] = value;
 		size_++;
 	}
 

@@ -199,8 +199,8 @@ class list
 		size_ = other.size_;
 		other.head_ = new node();
 		other.tail_ = new node();
-		other.head_->next_node_=other.tail_;
-		other.tail_->prev_node_=other.head_;
+		other.head_->next_node_ = other.tail_;
+		other.tail_->prev_node_ = other.head_;
 		other.size_ = 0;
 	}
 
@@ -211,7 +211,7 @@ class list
 	void push_back(const Type& value)
 	{
 		node* last = tail_->prev_node_;
-		node* new_last = new node(tail_->prev_node_, value, tail_);
+		node* new_last = new node(last, value, tail_);
 		tail_->prev_node_ = new_last;
 		last->next_node_ = new_last;
 		++size_;
@@ -293,7 +293,7 @@ class list
 
 #pragma endregion
 
-	T operator[](size_t pos) const
+	const T& operator[](size_t pos) const
 	{
 		iterator it = begin();
 		it += pos;
@@ -331,7 +331,16 @@ class list
 
 	friend auto operator<=>(const list& lhs, const list& rhs)
 	{
-		return lexicographical_compare_(lhs, rhs);
+		iterator it2 = rhs.begin();
+		for (iterator it1 = lhs.begin(); it1 != lhs.end() && it1 != rhs.end();
+			 it1++, it2++)
+		{
+			if (*it1 != *it2)
+			{
+				return *it1 <=> *it2;
+			}
+		}
+		return lhs.size() <=> rhs.size();
 	}
 
 	friend std::ostream& operator<<(std::ostream& os, const list& other)

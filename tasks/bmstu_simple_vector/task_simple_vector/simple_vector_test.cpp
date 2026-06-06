@@ -480,3 +480,19 @@ TEST(SimpleVector, PushBackCopyMove3)
 	auto it = v.begin();
 	it = nullptr;
 }
+
+TEST(SimpleVector, DummyFind)
+{
+	bmstu::simple_vector<std::string> vs{"find", "me", "needle"};
+	auto n_it = vs.find("needle");
+	ASSERT_EQ(n_it, vs.begin() + 2);
+	auto n_it2 = vs.find("zoopark");
+	ASSERT_EQ(n_it2, vs.end());
+
+	bmstu::simple_vector<int> vs2{1, 2, 3};
+	auto n_it2a = vs2.find(3);
+	ASSERT_EQ(n_it2a, vs2.begin() + 2);
+	auto n_it22 = vs2.find(666);
+	ASSERT_EQ(n_it22, vs2.end());
+}
+

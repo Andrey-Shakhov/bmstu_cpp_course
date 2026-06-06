@@ -351,7 +351,14 @@ class simple_vector
 		size_++;
 	}
 
-	void clear() noexcept { size_ = 0; }
+	void clear() noexcept
+	{
+		for (size_t i = 0; i < size_; i++)
+		{
+			data_[i].~T();
+		}
+		size_ = 0;
+	}
 
 	void push_back(const T& value)
 	{
@@ -373,9 +380,22 @@ class simple_vector
 	{
 		if (size_ != 0)
 		{
-			data_[size_ - 1] = T();
+			data_[size_ - 1].~T();
 			size_--;
 		}
+	}
+	iterator find(T name)
+	{
+		size_t index = -1;
+		for (size_t i=0; i<size_; i++){
+			if (data_[i]==name){
+				index = i;
+			}
+		}
+		if (index==-1){
+			return end();
+		}
+		return iterator(begin() + index);
 	}
 
 	friend bool operator==(const simple_vector& lhs, const simple_vector& rhs)

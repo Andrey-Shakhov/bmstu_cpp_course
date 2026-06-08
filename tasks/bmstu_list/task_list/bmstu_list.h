@@ -273,23 +273,23 @@ class list
 
 #pragma region iterators
 
-	iterator begin() noexcept { return iterator{head_->next_node_}; }
+	iterator begin() noexcept { return iterator(head_->next_node_); }
 
-	iterator end() noexcept { return iterator{tail_}; }
+	iterator end() noexcept { return iterator(tail_); }
 
 	const_iterator begin() const noexcept
 	{
-		return const_iterator{head_->next_node_};
+		return const_iterator(head_->next_node_);
 	}
 
-	const_iterator end() const noexcept { return const_iterator{tail_}; }
+	const_iterator end() const noexcept { return const_iterator(tail_); }
 
 	const_iterator cbegin() const noexcept
 	{
-		return const_iterator{head_->next_node_};
+		return const_iterator(head_->next_node_);
 	}
 
-	const_iterator cend() const noexcept { return const_iterator{tail_}; }
+	const_iterator cend() const noexcept { return const_iterator(tail_); }
 
 #pragma endregion
 

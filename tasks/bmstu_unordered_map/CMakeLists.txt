@@ -26,3 +26,4 @@ target_include_directories(${NAME_EXECUTABLE} PUBLIC
 target_link_libraries(${NAME_EXECUTABLE}
         GTest::gtest_main
         fast-streebog-lib)
+gtest_discover_tests(${NAME_EXECUTABLE})
